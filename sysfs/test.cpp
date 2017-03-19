@@ -1,5 +1,8 @@
 #include "gpio.h"
 #include <unistd.h>
+#include <iostream>
+
+using namespace std;
 
 int main() {
     Gpio g;
@@ -8,9 +11,11 @@ int main() {
 
     while (true)
     {
-        g.digitalWrite(4, HIGH);
+        cout << "HIGH" << endl;
+        g.pinOn(4);
         sleep(1);
-        g.digitalWrite(4, LOW);
+        cout << "LOW" << endl;
+        g.pinOff(4);
         sleep(1);
     }
 

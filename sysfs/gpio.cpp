@@ -21,9 +21,6 @@ Gpio::Gpio()
             direction_files[i].open("/sys/class/gpio/gpio" + std::to_string(pin) + "/direction");
             // initialize each pin as OUTPUT pins
             direction_files[i] << "out" << std::endl;
-
-            // open each value file ofstream
-            // output_files[pin].open("/sys/class/gpio/gpio" + std::to_string(pin_numbers[pin]) + "/value");
         }
     }
 }
@@ -40,7 +37,7 @@ Gpio::~Gpio()
             output_files[i].close();
             input_files[i].close();
             direction_files[i].close();
-            pin_states[i] = OUTPUT;
+            pin_modes[i] = OUTPUT;
 
             // unexport each pin
             unexport_file << pin << std::endl;
@@ -79,29 +76,31 @@ void Gpio::pinOff(int pin)
 }
 
 
-//Create, open and sets the pen state
-//State is if it is a input or output pin
+//Create, open and sets the pen mode
+//Mode is if it is a input or output pin
 //  true  = input pin
 //  false = output pin
-void Gpio::pinMode(int pin, State state)
+void Gpio::pinMode(int pin, Mode mode)
 {
     int pin_number = pin_numbers[pin];
+
+    std::cout << "setting pin " << pin_number << " to mode " << mode << std::endl;
 
     if (pin_number < 0)
     {
         std::cerr << "Pin " << pin << " cannot be used. C.f. http://odroid.com/dokuwiki/doku.php?id=en:xu4_hardware#expansion_connectors" << std::endl;
         return;
     }
-    if (state == OUTPUT)
+    if (mode == OUTPUT)
     {
-        pin_states[pin] = state;
+        pin_modes[pin] = mode;
         input_files[pin].close();
         output_files[pin].open("/sys/class/gpio/gpio" + std::to_string(pin_numbers[pin]) + "/value");
         direction_files[pin] << "out" << std::endl;
     }
     else
     {
-        pin_states[pin] = state;
+        pin_modes[pin] = mode;
         output_files[pin].close();
         input_files[pin].open("/sys/class/gpio/gpio" + std::to_string(pin_numbers[pin]) + "/value");
         direction_files[pin] << "in" << std::endl;

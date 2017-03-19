@@ -10,14 +10,14 @@
 #define OUTPUT Output
 #define INPUT Input
 
-enum State {Output, Input};
+enum Mode {Output, Input};
 
 class Gpio
 {
 public:
     Gpio();
     ~Gpio();
-    void pinMode(int pin, State state=OUTPUT);
+    void pinMode(int pin, Mode mode=OUTPUT);
     bool digitalRead(int pin);
     void digitalWrite(int pin, bool value=true);
     void pinOn(int pin);
@@ -36,7 +36,7 @@ private:
                                      -1, -1, -1, -1, -1, -1, 187, 34, 188, 225, -1, 226, 229, 227,
                                      228};
 
-    State pin_states[42 + 1] = {OUTPUT};
+    Mode pin_modes[42 + 1] = {OUTPUT};
 
     std::ofstream direction_files[42 + 1];
     std::ifstream input_files[42 + 1];
